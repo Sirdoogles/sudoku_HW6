@@ -7,8 +7,8 @@ private:
     // Helper function to find empty cell.
     bool findEmptyCell(int &row, int &col)
     {
-        int thisRow = row;
-        int thisCol = col;
+        int thisRow;
+        int thisCol;
 
         for(thisRow = 0; thisRow < 9; thisRow++)
         {
@@ -16,7 +16,6 @@ private:
             {
                 if(grid[thisRow][thisCol] == 0)
                 {
-                    //std::cout << "Empty Spot at: " << thisRow << ", " << thisCol << std::endl;
                     row = thisRow;
                     col = thisCol;
                     return true;
@@ -128,22 +127,19 @@ public:
 
     bool solve() {
         // homework
-        // Sources:
+        // Sources: https://www.sanfoundry.com/cpp-program-solve-sudoku-problem-backtracking/
         int rowCurrent;
         int colCurrent;
-        //findEmptyCell(rowCurrent, colCurrent);
-
-
         if(!findEmptyCell(rowCurrent, colCurrent))
         {
             return true; // If no cell is found empty, return true. Base case.
         }
         for(int num = 1; num <= 9; num++)
         {
-            if(isSafe(rowCurrent, colCurrent, num))
+            if(isSafe(rowCurrent, colCurrent, num)) // Checks if number placement is legal.
             {
                 grid[rowCurrent][colCurrent] = num;
-                if(solve())
+                if(solve()) // Recusive call.
                 {
                     return true;
                 }
