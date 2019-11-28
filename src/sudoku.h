@@ -7,13 +7,18 @@ private:
     // Helper function to find empty cell.
     bool findEmptyCell(int &row, int &col)
     {
+        int thisRow = row;
+        int thisCol = col;
 
-        for(int row = 0; row < 9; row++)
+        for(thisRow = 0; thisRow < 9; thisRow++)
         {
-            for(int col = 0; col < 9; col++)
+            for(thisCol = 0; thisCol < 9; thisCol++)
             {
-                if(!grid[row][col]) //If no entry present, return true.
+                if(grid[thisRow][thisCol] == 0)
                 {
+                    //std::cout << "Empty Spot at: " << thisRow << ", " << thisCol << std::endl;
+                    row = thisRow;
+                    col = thisCol;
                     return true;
                 }
             }
@@ -51,9 +56,9 @@ private:
     bool usedInBox(int boxStartRow, int boxStartCol, int target)
     {
 
-        for(int rowCurrent = 0; rowCurrent > 3; rowCurrent++) // Traverse subbox
+        for(int rowCurrent = 0; rowCurrent < 3; rowCurrent++) // Traverse subbox
         {
-            for(int colCurrent = 0; colCurrent > 3; colCurrent++)
+            for(int colCurrent = 0; colCurrent < 3; colCurrent++)
             {
                 if(grid[rowCurrent + boxStartRow][colCurrent + boxStartCol] == target) // If number is found, return true.
                 {
@@ -87,7 +92,12 @@ public:
     }
 
     bool operator ==(const Sudoku & other) {
-        memcpy(this->grid, other.grid, 9 * 9 * sizeof(int));
+        for (int i=0; i<9*9; i++) {
+            if (grid[i%3][i/3] != other.grid[i%3][i/3]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     int get(int i, int j) {
@@ -121,14 +131,25 @@ public:
         // Sources:
         int rowCurrent;
         int colCurrent;
+        //findEmptyCell(rowCurrent, colCurrent);
+
 
         if(!findEmptyCell(rowCurrent, colCurrent))
         {
             return true; // If no cell is found empty, return true. Base case.
         }
-
-
-
-        return false;   // placeholder
+        for(int num = 1; num <= 9; num++)
+        {
+            if(isSafe(rowCurrent, colCurrent, num))
+            {
+                grid[rowCurrent][colCurrent] = num;
+                if(solve())
+                {
+                    return true;
+                }
+                grid[rowCurrent][colCurrent] = 0;
+            }
+        }
+        return false;
     }
 };

@@ -46,6 +46,11 @@ TEST(sudoku, case1) {
     Sudoku sudoku(grid);
     sudoku.print();
     sudoku.solve();
+    std::cout << std::endl;
+
+    std::cout << std::endl;
+    sudoku.print();
+
     ASSERT_TRUE(sudoku==answer);
 }
 
